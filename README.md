@@ -4,7 +4,7 @@ This repository contains a Python script for estimating runtime of some **open-s
 
 ## Experiment
 
-For the benchmarking we used the libraries: [ITKColorNormalization](https://github.com/InsightSoftwareConsortium/ITKColorNormalization) and [StainTools](https://github.com/Peter554/StainTools). ITK included an implementation of the Vahadane algorithm, whereas StainTools included implementations of the Vahadane, Macenko, and Reinhard algorithms. Runtime experiments were conducted over 50 iterations using default parameters, and the mean and standard deviation were reported. The hardware used was an eight-core, Intel i7-9800X CPU, with 64 GB RAM, using the Ubuntu Linux 18.04 operating system.
+For the benchmarking we used the libraries: [ITKColorNormalization](https://github.com/InsightSoftwareConsortium/ITKColorNormalization) and [StainTools](https://github.com/Peter554/StainTools). ITK included an implementation of the Vahadane algorithm, whereas StainTools included implementations of the Vahadane, Macenko, and Reinhard algorithms. Runtime experiments were conducted over 50 iterations using default parameters, and the mean and standard deviation were reported. The hardware used was an eight-core Intel i7-9800X CPU, with 32 GB RAM, using the Ubuntu Linux 18.04 operating system.
 
 ## Result
 
@@ -39,4 +39,10 @@ python runtime.py
 ```
 
 The script support various arguments, i.e. for choosing which method to use or how many iterations to run. Append **-h** to the command to see which arguments are supported and how to use them.
+
+## Troubleshooting
+
+Note that StainTools depends on [spams](https://github.com/samuelstjean/spams-python), which is currently not supported on Windows. Hence, it would not be possible to run the experiments using the Windows operating system. However, Ubuntu Linux and macOS should work.
+
+If the patch size chosen is too small, the stain normalization methods might fail, especially the ITK-implementation. The same implementation might also fail if a colourless patch is provided. The reference image and input images should therefore be of representative size with meaningful content, for the method to produce a meaningful output.
 
