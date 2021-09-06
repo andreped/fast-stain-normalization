@@ -11,11 +11,18 @@ from tqdm import tqdm
 import sys
 
 
-def normalize(input_image, reference_image, method, both):
+def normalize(input_image, reference_image, method, both, normalizer_m):
     if method == "staintools":
-        normalizer = staintools.StainNormalizer(method='vahadane')
+        if normalizer_m in ["macenko", "vahadane"]:
+            normalizer = staintools.StainNormalizer(method=normalizer_m)
+        elif normalizer_m == "reinhard":
+            normalizer = staintools.ReinhardColorNormalizer()
+        else:
+            raise ValueError
+
         input_image = np.asarray(input_image)
         reference_image = np.asarray(reference_image)
+
         if both:
             time_ = time.time()
             normalizer.fit(reference_image)
@@ -26,6 +33,7 @@ def normalize(input_image, reference_image, method, both):
             time_ = time.time()
             transformed = normalizer.transform(input_image)  # only report runtime for transform (not considering fit to reference image)
             ret = time.time() - time_
+
     elif method == "itk":
         time_ = time.time()
         transformed = itk.structure_preserving_color_normalization_filter(  # @TODO: This should include a fit of the reference image as well, right?
@@ -39,7 +47,7 @@ def normalize(input_image, reference_image, method, both):
     return transformed, ret
 
 
-def run_example(new_size=256, method="itk", N_iter=50, figure=True, both=False):
+def run_example(new_size=256, method="itk", N_iter=50, figure=True, both=False, normalizer="vahadane"):
     # Fetch images, if we dont have them already.
     input_image_filename = 'Easy1.png'
     input_image_url = 'https://data.kitware.com/api/v1/file/576ad39b8d777f1ecd6702f2/download'
@@ -76,7 +84,7 @@ def run_example(new_size=256, method="itk", N_iter=50, figure=True, both=False):
 
     res = np.zeros(N_iter)
     for i in tqdm(range(N_iter), "Iter:"):
-        transformed, ret = normalize(input_image, reference_image, method, both)
+        transformed, ret = normalize(input_image, reference_image, method, both, normalizer)
         res[i] = ret
 
     print("Runtime results (mu/std):", np.mean(res), np.std(res))
@@ -106,10 +114,14 @@ def main(argv):
                     help="whether to make figure.")
     parser.add_argument('--both', metavar='--b', type=int, nargs='?', default=0,
                     help="whether to include fit inside runtime estimation (only relevant for staintools).")
+    parser.add_argument('--normalizer', metavar='--n', type=str, nargs='?', default="vahadane",
+                    help="choose which normalization method to use for the staintools method (only supported method for itk is 'vahadane').")
     ret = parser.parse_args(); print(ret)
 
     if ret.method not in ["itk", "staintools"]:
         raise ValueError("Please, choose between the methods: 'itk' or 'staintools'.")
+    if ret.normalizer not in ["vahadane", "macenko", "reinhard"]:
+        raise ValueError("Please, choose between the methods: 'reinhard', 'macenko', and 'vahadane'.")
     if ret.iter < 1:
         raise ValueError("Please, choose number of iterations to be >= 1.")
     if ret.new_size < 1:
