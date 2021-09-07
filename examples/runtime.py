@@ -9,6 +9,9 @@ import staintools
 import argparse
 from tqdm import tqdm
 import sys
+import torch
+from torchvision import transforms
+import torchstain
 
 
 def normalize(input_image, reference_image, method, both, normalizer_m):
@@ -41,6 +44,20 @@ def normalize(input_image, reference_image, method, both, normalizer_m):
         reference_image,
         color_index_suppressed_by_hematoxylin=0,
         color_index_suppressed_by_eosin=1)
+        ret = time.time() - time_
+    elif method == "torch":
+        T = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Lambda(lambda x: x*255)
+        ])
+
+        torch_normalizer = torchstain.MacenkoNormalizer(backend='torch')
+        torch_normalizer.fit(T(reference_image))
+
+        time_ = time.time()
+        t_to_transform = T(input_image)
+        norm, _, _ = torch_normalizer.normalize(I=t_to_transform, stains=True)
+        norm = norm.numpy()
         ret = time.time() - time_
     else:
         raise ValueError
@@ -118,8 +135,8 @@ def main(argv):
                     help="choose which normalization method to use for the staintools method (only supported method for itk is 'vahadane').")
     ret = parser.parse_args(); print(ret)
 
-    if ret.method not in ["itk", "staintools"]:
-        raise ValueError("Please, choose between the methods: 'itk' or 'staintools'.")
+    if ret.method not in ["itk", "staintools", "torch"]:
+        raise ValueError("Please, choose between the methods: 'itk', 'staintools', and 'torch'.")
     if ret.normalizer not in ["vahadane", "macenko", "reinhard"]:
         raise ValueError("Please, choose between the methods: 'reinhard', 'macenko', and 'vahadane'.")
     if ret.iter < 1:
