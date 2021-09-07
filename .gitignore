@@ -6,3 +6,4 @@
 *venv_torch/
 *.py.bak
 *output_normalization
+*__pycache__/
