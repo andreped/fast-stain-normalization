@@ -2,4 +2,7 @@
 *.jpg
 *.jpeg
 *venv/
+*venv_tf/
+*venv_torch/
 *.py.bak
+*output_normalization

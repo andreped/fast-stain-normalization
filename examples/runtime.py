@@ -12,9 +12,10 @@ import sys
 import torch
 from torchvision import transforms
 import torchstain
+import warnings
 
 
-def normalize(input_image, reference_image, method, both, normalizer_m):
+def normalize(input_image, reference_image, method, both, normalizer_m, gpu):
     if method == "staintools":
         if normalizer_m in ["macenko", "vahadane"]:
             normalizer = staintools.StainNormalizer(method=normalizer_m)
@@ -46,6 +47,11 @@ def normalize(input_image, reference_image, method, both, normalizer_m):
         color_index_suppressed_by_eosin=1)
         ret = time.time() - time_
     elif method == "torch":
+        warnings.filterwarnings("ignore")
+
+        input_image = np.asarray(input_image)
+        reference_image = np.asarray(reference_image)
+
         T = transforms.Compose([
             transforms.ToTensor(),
             transforms.Lambda(lambda x: x*255)
@@ -56,15 +62,15 @@ def normalize(input_image, reference_image, method, both, normalizer_m):
 
         time_ = time.time()
         t_to_transform = T(input_image)
-        norm, _, _ = torch_normalizer.normalize(I=t_to_transform, stains=True)
-        norm = norm.numpy()
+        transformed, _, _ = torch_normalizer.normalize(I=t_to_transform, stains=True)
+        transformed = transformed.numpy()
         ret = time.time() - time_
     else:
         raise ValueError
     return transformed, ret
 
 
-def run_example(new_size=256, method="itk", N_iter=50, figure=True, both=False, normalizer="vahadane"):
+def run_example(new_size=256, method="itk", N_iter=50, figure=True, both=False, normalizer="vahadane", gpu=False):
     # Fetch images, if we dont have them already.
     input_image_filename = 'Easy1.png'
     input_image_url = 'https://data.kitware.com/api/v1/file/576ad39b8d777f1ecd6702f2/download'
@@ -101,7 +107,7 @@ def run_example(new_size=256, method="itk", N_iter=50, figure=True, both=False, 
 
     res = np.zeros(N_iter)
     for i in tqdm(range(N_iter), "Iter:"):
-        transformed, ret = normalize(input_image, reference_image, method, both, normalizer)
+        transformed, ret = normalize(input_image, reference_image, method, both, normalizer, gpu)
         res[i] = ret
 
     print("Runtime results (mu/std):", np.mean(res), np.std(res))
@@ -133,6 +139,8 @@ def main(argv):
                     help="whether to include fit inside runtime estimation (only relevant for staintools).")
     parser.add_argument('--normalizer', metavar='--n', type=str, nargs='?', default="vahadane",
                     help="choose which normalization method to use for the staintools method (only supported method for itk is 'vahadane').")
+    parser.add_argument('--gpu', metavar='--c', type=int, nargs='?', default=1,
+                    help="whether to enable GPU for computations (if available, and only relevant for torch method).")
     ret = parser.parse_args(); print(ret)
 
     if ret.method not in ["itk", "staintools", "torch"]:
@@ -147,6 +155,8 @@ def main(argv):
         raise ValueError("Please, choose 1 to show figure, else 0.")
     if ret.both not in [0, 1]:
         raise ValueError("Please, choose 1 to include fit inside runtime estimation, else 0.")
+    if ret.gpu not in [0, 1]:
+        raise ValueError("Please, choose 1 to enable GPU, else 0.")
 
     # run
     run_example(*vars(ret).values())

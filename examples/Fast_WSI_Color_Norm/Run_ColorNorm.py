@@ -114,10 +114,14 @@ def run_batch_colornorm(filenames,nstains,lamb,output_direc,img_level,background
 		#xdim,ydim=I.level_dimensions[level]
 		#ds=I.level_downsamples[level]
 
-		if file_no==0:
-			print("Target Stain Separation in progress:",filename,str(xdim)+str("x")+str(ydim))
-		else:
-			print("Source Stain Separation in progress:",filename,str(xdim)+str("x")+str(ydim))
+		I = cv2.imread(filename)[..., ::-1]
+		level = 0
+
+
+		#if file_no==0:
+		#	print("Target Stain Separation in progress:",filename,str(xdim)+str("x")+str(ydim))
+		#else:
+		#	print("Source Stain Separation in progress:",filename,str(xdim)+str("x")+str(ydim))
 		print("\t \t \t \t \t \t \t \t \t \t Time: 0")
 
 

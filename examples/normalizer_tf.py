@@ -2,7 +2,7 @@
 import os
 os.environ['PATH'] = "C:/Users/andrp/Downloads/openslide-win64-20171122/openslide-win64-20171122/bin" + ";" + os.environ['PATH']
 
-
+import sys
 import argparse
 from Fast_WSI_Color_Norm.Run_ColorNorm import run_colornorm
 import tensorflow as tf
