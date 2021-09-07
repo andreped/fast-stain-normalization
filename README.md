@@ -22,13 +22,14 @@ cd examples/
 
 3. Run script using the CLI:
 ```
-python normalizer_torch.py --ref path-to-reference-image --img path-to-images-to-convert --out path-to-store-output
+python normalizer_torch.py --ref full-path-to-reference-image --img path-to-images-to-convert --out path-to-store-output
 ```
 
-Default for ```--out``` is ```"./"```, hence, it will be stored at the location of where the script is ran from. To alter the output location, one could for instance do this:
-```
-python normalizer_torch.py --ref /home/username/Downloads/ref-img.png --img /home/username/some-images/ --out /home/username/
-```
+`--ref` : the full path to the reference image you wish to use, including filename and format.
+
+`--img` : should either be the path to the directly containing the images you wish to normalize, but it could also be the full path to a single image.
+
+`--out` : the path to where you wish to store the result. It will be stored in the same structure as provided in `--img`, and default is `./`.
 
 ## Experiment
 
