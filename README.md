@@ -4,7 +4,7 @@ This repository contains a tool for stain normalizing images, relevant for compu
 
 We also include a minor runtime benchmark of some **open-source stain normalization** methods.
 
-The source code is available for both (see [here]() for tool and [here]() for benchmark).
+The source code is available for both. See [here](https://github.com/andreped/fast-stain-normalization#usage) for how to use the tool on your own data, and see [here](https://github.com/andreped/fast-stain-normalization#running-experiments) for how to redo the benchmark experiments.
 
 ## Usage
 1. Clone repository:
@@ -15,14 +15,19 @@ cd fast-stain-normalization/
 
 2. Create virtual environment and install dependencies:
 ```
-virtualenv -ppython3 venv --clear
-pip install -r requirements.txt
+virtualenv -ppython3 venv_torch --clear
+pip install -r requirements_torch.txt
 cd examples/
 ```
 
 3. Run script using the CLI:
 ```
-python normalizer_torch.py
+python normalizer_torch.py --ref path-to-reference-image --img path-to-images-to-convert --out path-to-store-output
+```
+
+Default for ```--out``` is ```"./"```, hence, it will be stored at the location of where the script is ran from. To alter the output location, one could for instance do this:
+```
+python normalizer_torch.py --ref /home/username/Downloads/ref-img.png --img /home/username/some-images/ --out /home/username/
 ```
 
 ## Experiment
