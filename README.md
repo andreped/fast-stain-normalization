@@ -6,6 +6,8 @@ We also include a minor runtime benchmark of some **open-source stain normalizat
 
 The source code is available for both. See [here](https://github.com/andreped/fast-stain-normalization#usage) for how to use the tool on your own data, and see [here](https://github.com/andreped/fast-stain-normalization#running-experiments) for how to redo the benchmark experiments.
 
+![Screenshot](figures/example_subplot.PNG)
+
 ## Usage
 1. Clone repository:
 ```
