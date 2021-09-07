@@ -52,6 +52,8 @@ def run(reference_image_filename, img_path, out_path):
 
 def run_batch(reference_image_filename, img_path, out_path):
 
+    if reference_image_filename.split(".")[-1].lower() not in ["png", "jpg", "jpeg", "tif", "tiff"]:
+        raise ValueError("\nImage format not supported:", reference_image_filename)
     target = cv2.cvtColor(cv2.imread(reference_image_filename), cv2.COLOR_BGR2RGB)
 
     T = transforms.Compose([
@@ -67,6 +69,9 @@ def run_batch(reference_image_filename, img_path, out_path):
     os.makedirs(save_path, exist_ok=True)
 
     for path in os.listdir(img_path):
+        if path.split(".")[-1].lower() not in ["png", "jpg", "jpeg", "tif", "tiff"]:
+            print("\nImage format not supported:", img_path + path)
+            continue
         to_transform = cv2.cvtColor(cv2.imread(img_path + path), cv2.COLOR_BGR2RGB)
 
         t_to_transform = T(to_transform)
