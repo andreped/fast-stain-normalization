@@ -1,5 +1,7 @@
 # fast-stain-normalization
 
+[![license](https://img.shields.io/github/license/DAVFoundation/captain-n3m0.svg?style=flat-square)](https://github.com/DAVFoundation/captain-n3m0/blob/master/LICENSE)
+
 This repository contains a tool for stain normalizing images, relevant for computational pathology.
 
 We also include a minor runtime benchmark of some **open-source stain normalization** methods.
