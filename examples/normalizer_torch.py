@@ -29,6 +29,11 @@ def subplot(imgs):
 
 def run(reference_image_filename, img_path, out_path):
 
+    # fix paths
+    img_path = img_path.replace("\\", "/")
+    reference_image_filename = reference_image_filename.replace("\\", "/")
+    out_path = out_path.replace("\\", "/")
+
     target = cv2.cvtColor(cv2.imread(reference_image_filename), cv2.COLOR_BGR2RGB)
     to_transform = cv2.cvtColor(cv2.imread(img_path), cv2.COLOR_BGR2RGB)
 
@@ -51,6 +56,11 @@ def run(reference_image_filename, img_path, out_path):
 
 
 def run_batch(reference_image_filename, img_path, out_path):
+
+    # fix paths
+    img_path = img_path.replace("\\", "/")
+    reference_image_filename = reference_image_filename.replace("\\", "/")
+    out_path = out_path.replace("\\", "/")
 
     if reference_image_filename.split(".")[-1].lower() not in ["png", "jpg", "jpeg", "tif", "tiff"]:
         raise ValueError("\nImage format not supported:", reference_image_filename)
