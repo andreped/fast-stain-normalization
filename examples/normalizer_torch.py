@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import warnings
 import os
 from datetime import datetime, date
+from tqdm import tqdm
 
 
 # mute all warnings
@@ -28,11 +29,6 @@ def subplot(imgs):
 
 
 def run(reference_image_filename, img_path, out_path):
-
-    # fix paths
-    img_path = img_path.replace("\\", "/")
-    reference_image_filename = reference_image_filename.replace("\\", "/")
-    out_path = out_path.replace("\\", "/")
 
     target = cv2.cvtColor(cv2.imread(reference_image_filename), cv2.COLOR_BGR2RGB)
     to_transform = cv2.cvtColor(cv2.imread(img_path), cv2.COLOR_BGR2RGB)
@@ -57,11 +53,6 @@ def run(reference_image_filename, img_path, out_path):
 
 def run_batch(reference_image_filename, img_path, out_path):
 
-    # fix paths
-    img_path = img_path.replace("\\", "/")
-    reference_image_filename = reference_image_filename.replace("\\", "/")
-    out_path = out_path.replace("\\", "/")
-
     if reference_image_filename.split(".")[-1].lower() not in ["png", "jpg", "jpeg", "tif", "tiff"]:
         raise ValueError("\nImage format not supported:", reference_image_filename)
     target = cv2.cvtColor(cv2.imread(reference_image_filename), cv2.COLOR_BGR2RGB)
@@ -78,7 +69,7 @@ def run_batch(reference_image_filename, img_path, out_path):
     save_path = out_path + "output_normalization_" + curr_date + "_" + curr_time + "/" + img_path.split("/")[-2] + "/"
     os.makedirs(save_path, exist_ok=True)
 
-    for path in os.listdir(img_path):
+    for path in tqdm(os.listdir(img_path), "Images:"):
         if path.split(".")[-1].lower() not in ["png", "jpg", "jpeg", "tif", "tiff"]:
             print("\nImage format not supported:", img_path + path)
             continue
@@ -106,15 +97,23 @@ def main(argv):
         raise ValueError("Please, set path to the reference image you wish to use.")
     if ret.img is None:
         raise ValueError("Please, set path to the folder containing the images to normalize.")
+    if not os.path.exists(ret.ref):
+        raise ValueError("Reference image provided does not exist!")
+    if not os.path.exists(ret.img):
+        raise ValueError("Image path provided does not exist!")
+
+    # fix paths
+    ret.img = ret.img.replace("\\", "/")
+    ret.ref = ret.ref.replace("\\", "/")
+    ret.out = ret.out.replace("\\", "/")
 
     # run
-    if os.path.exists(ret.img):
-        if os.path.isdir(ret.img):
-            run_batch(*vars(ret).values())
-        else:
-            run(*vars(ret).values())
+    if os.path.isdir(ret.img):
+        if not ret.img.endswith("/"):
+            ret.img += "/"
+        run_batch(*vars(ret).values())
     else:
-        raise ValueError
+        run(*vars(ret).values())
 
 
 if __name__ == "__main__":
