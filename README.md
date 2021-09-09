@@ -37,6 +37,9 @@ python normalizer_torch.py --ref full-path-to-reference-image --img path-to-imag
 | `--ref` | the full path to the reference image you wish to use, including filename and format. |
 | `--img` | should either be the path to the directly containing the images you wish to normalize, but it could also be the full path to a single image. |
 | `--out` | the path to where you wish to store the result. It will be stored in the same structure as provided in `--img`, and default is `./`. |
+| `--cpu` | to force computations to use the CPU. GPU disabled by default (=1).. |
+| `--mp` | to enable multiprocessing for performing batch mode with parallel processing. Disabled by default (=0). |
+| `--wk` | set number of workers (relevant for multiprocessing). Default is 1. |
 
 ## Experiment
 
@@ -54,7 +57,7 @@ Preliminary results showed that the Reinhard color augmentation algorithm was th
 
 ## Discussion
 
-After running ITK's implementation of Vahadane on other images, we found that the method was less robust than TS's implementation of Macenko. ITK seemed to crash often and produce errors on most images that contained either some noise or in scenarios where there were poor contrast between the colours, which might happen when looking at the tissue from a lower resolution level. Hence, the best trade-off among the three might be TS' implementation of Macenko as it is robust, fast, and provides suitable normalization performance [(see here for reference)](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7460968). 
+After running ITK's implementation of Vahadane on other images, we found that the method was less robust than TS's implementation of Macenko. ITK seemed to crash often and produce errors on most images that contained either some noise or in scenarios where there were poor contrast between the colours, which might happen when looking at the tissue from a lower resolution level. Hence, the best trade-off among the three might be TS' implementation of Macenko as it is robust, fast, and provides suitable normalization performance [(see here for reference)](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7460968).
 
 ## Conclusion
 
@@ -83,6 +86,17 @@ python runtime.py
 
 The script support various arguments, i.e. for choosing which method to use or how many iterations to run. Append **-h** to the command to see which arguments are supported and how to use them.
 
+## TODO
+
+- [x] Create a user-friendly CLI tool using `torchstain`
+- [x] Enable GPU computation
+- [x] Enable batch mode
+- [x] Add parallel processing option for batch mode
+- [ ] Further optimize the base code to be better suited for parallelization
+- [ ] Add stain augmentation alternative
+
+Using `torchstain`, after doing these experiments we have already introduced GPU computation
+
 ## Troubleshooting
 
 Virtualenv can be installed using pip:
@@ -105,4 +119,4 @@ If the patch size chosen is too small, the stain normalization methods might fai
 
 This could not have been possible without the great effort of fellow open-source GitHub users that provide brilliant solutions for me to test and explore!
 
-The code is based on the three GitHub repositories: [ITKColorNormalization](https://github.com/InsightSoftwareConsortium/ITKColorNormalization), [StainTools](https://github.com/Peter554/StainTools) and [torchstain](https://github.com/EIDOSlab/torchstain). Where the latter, torchstain, was used as foundation to develop the tool.
+The code in this repository is based on the three GitHub repositories: [ITKColorNormalization](https://github.com/InsightSoftwareConsortium/ITKColorNormalization), [StainTools](https://github.com/Peter554/StainTools) and [torchstain](https://github.com/EIDOSlab/torchstain). Where the latter, torchstain, was used as foundation to develop the tool.
