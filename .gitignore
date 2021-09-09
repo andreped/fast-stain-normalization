@@ -7,3 +7,5 @@
 *.py.bak
 *output_normalization
 *__pycache__/
+dist/
+torchstain*

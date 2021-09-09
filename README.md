@@ -22,6 +22,8 @@ cd fast-stain-normalization/
 virtualenv -ppython3 venv_torch --clear
 source venv_torch/bin/activate
 pip install -r misc/requirements_torch.txt
+pip install torch==1.7.0+cu110 torchvision==0.8.0+cu110 torchaudio==0.7.0 -f https://download.pytorch.org/whl/torch_stable.html
+pip install git+https://github.com/andreped/torchstain.git
 cd examples/
 ```
 
