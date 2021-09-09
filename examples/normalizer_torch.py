@@ -9,10 +9,16 @@ import warnings
 import os
 from datetime import datetime, date
 from tqdm import tqdm
+from math import ceil
 
 
 # mute all warnings
 warnings.filterwarnings("ignore")
+
+
+def generator(x, batch_size, N):
+    for idx in range(int(ceil(N / batch_size))):
+        yield x[idx * batch_size:(idx + 1) * batch_size]
 
 
 def get_time():
@@ -69,6 +75,7 @@ def run_batch(reference_image_filename, img_path, out_path):
     save_path = out_path + "output_normalization_" + curr_date + "_" + curr_time + "/" + img_path.split("/")[-2] + "/"
     os.makedirs(save_path, exist_ok=True)
 
+    # sequential (batch_size = 1)
     for path in tqdm(os.listdir(img_path), "Images:"):
         if path.split(".")[-1].lower() not in ["png", "jpg", "jpeg", "tif", "tiff"]:
             print("\nImage format not supported:", img_path + path)
