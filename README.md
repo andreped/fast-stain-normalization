@@ -92,6 +92,7 @@ The script support various arguments, i.e. for choosing which method to use or h
 - [x] Enable GPU computation
 - [x] Enable batch mode
 - [x] Add parallel processing option for batch mode
+- [x] Improve `torchstain` to support batches directly in computations (may improve GPU runtime)
 - [ ] Further optimize the base code to be better suited for parallelization
 - [ ] Add stain augmentation alternative
 
