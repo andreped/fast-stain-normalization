@@ -10,15 +10,17 @@ The source code is available for both. See [here](https://github.com/andreped/fa
 
 ![Screenshot](figures/example_subplot.PNG)
 
+## Install
+
+```
+pip install git+https://github.com/andreped/fast-stain-normalization.git
+```
+
 ## Usage
 
-Install the program using pip (only need to do once!):
-
-1. pip install git+https://github.com/andreped/fast-stain-normalization.git
-
-Run the program as a CLI:
-
-2. fastStainNorm --ref full-path-to-reference-image --img path-to-images-to-convert --out path-to-store-output
+```
+fastStainNorm --ref full-path-to-reference-image --img path-to-images-to-convert --out path-to-store-output
+```
 
 | command | description |
 | ------------- | ------------- |
