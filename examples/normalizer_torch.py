@@ -40,9 +40,30 @@ def subplot(imgs):
     plt.show()
 
 
-def run(reference_image_filename, img_path, out_path, cpu):
+def single_transform(img_path, device, save_path, torch_normalizer, path):
+    T = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Lambda(lambda x: x*255)
+    ])
+
+    if path.split(".")[-1].lower() not in ["png", "jpg", "jpeg", "tif", "tiff"]:
+        print("\nImage format not supported:", img_path + path)
+        exit()
+    to_transform = cv2.cvtColor(cv2.imread(img_path + path), cv2.COLOR_BGR2RGB)
+
+    t_to_transform = T(to_transform).to(device)
+    norm, _, _ = torch_normalizer.normalize(I=t_to_transform, stains=True)
+    if device != "cpu":
+        norm = norm.cpu().numpy().astype("uint8")
+
+    cv2.imwrite(save_path + path, cv2.cvtColor(norm, cv2.COLOR_RGB2BGR))
+
+
+def run(reference_image_filename, img_path, out_path, cpu, parallel, workers):
     if torch.cuda.is_available() and (cpu == 0):
         device = torch.device("cuda:0")  # @FIXME: uses first CUDA-compatible GPU, add support for choosing which GPU relevant for multi-GPU setups
+    else:
+        device = torch.device("cpu")
 
     target = cv2.cvtColor(cv2.imread(reference_image_filename), cv2.COLOR_BGR2RGB)
     to_transform = cv2.cvtColor(cv2.imread(img_path), cv2.COLOR_BGR2RGB)
@@ -55,9 +76,10 @@ def run(reference_image_filename, img_path, out_path, cpu):
     torch_normalizer = torchstain.MacenkoNormalizer(backend='torch')
     torch_normalizer.fit(T(target).to(device))
 
-    t_to_transform = T(to_transform)
+    t_to_transform = T(to_transform).to(device)
     norm, _, _ = torch_normalizer.normalize(I=t_to_transform, stains=True)
-    norm = norm.numpy().astype("uint8")
+    if device != "cpu":
+        norm = norm.cpu().numpy().astype("uint8")
 
     curr_date, curr_time = get_time()
     save_path = out_path + "output_normalization_" + curr_date + "_" + curr_time + "/"
@@ -96,11 +118,10 @@ def run_batch(reference_image_filename, img_path, out_path, cpu, parallel, worke
 
         t_to_transform = T(to_transform).to(device)
         norm, _, _ = torch_normalizer.normalize(I=t_to_transform, stains=True)
-        norm = norm.cpu().numpy().astype("uint8")
+        if device != "cpu":
+            norm = norm.cpu().numpy().astype("uint8")
 
         cv2.imwrite(save_path + path, cv2.cvtColor(norm, cv2.COLOR_RGB2BGR))
-
-        #print("finished writing")
 
 
 def run_batch_parallel(reference_image_filename, img_path, out_path, cpu, parallel, workers):
@@ -130,25 +151,7 @@ def run_batch_parallel(reference_image_filename, img_path, out_path, cpu, parall
         ret = list(tqdm(p.imap_unordered(partial(single_transform, img_path, device, save_path, torch_normalizer), tmp), total=len(tmp)))
 
 
-def single_transform(img_path, device, save_path, torch_normalizer, path):
-    T = transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Lambda(lambda x: x*255)
-    ])
-
-    if path.split(".")[-1].lower() not in ["png", "jpg", "jpeg", "tif", "tiff"]:
-        print("\nImage format not supported:", img_path + path)
-        exit()
-    to_transform = cv2.cvtColor(cv2.imread(img_path + path), cv2.COLOR_BGR2RGB)
-
-    t_to_transform = T(to_transform).to(device)
-    norm, _, _ = torch_normalizer.normalize(I=t_to_transform, stains=True)
-    norm = norm.cpu().numpy().astype("uint8")
-
-    cv2.imwrite(save_path + path, cv2.cvtColor(norm, cv2.COLOR_RGB2BGR))
-
-
-def main(argv):
+def main():
     # init parser
     parser = argparse.ArgumentParser()
     parser.add_argument('--ref', metavar='--r', type=str, nargs='?',
@@ -157,13 +160,13 @@ def main(argv):
                     help="set path to which folder containing the images to normalize.")
     parser.add_argument('--out', metavar='--o', type=str, nargs='?', default="./",
                     help="set path to store the output.")
-    parser.add_argument('--cpu', metavar='--c', type=int, nargs='?', default=0,
-                    help="force computations to use CPU (GPU is enabled by default, if available)")
+    parser.add_argument('--cpu', metavar='--c', type=int, nargs='?', default=1,
+                    help="force computations to use CPU (GPU is disabled by default).")
     parser.add_argument('--mp', metavar='--c', type=int, nargs='?', default=0,
                     help="enable multiprocessing.")
     parser.add_argument('--wk', metavar='--c', type=int, nargs='?', default=1,
                     help="set number of workers relevant for multiprocessing.")
-    ret = parser.parse_args(); print(ret)
+    ret = parser.parse_args(sys.argv[1:]); print(ret)
 
     if ret.ref is None:
         raise ValueError("Please, set path to the reference image you wish to use.")
@@ -204,4 +207,4 @@ def main(argv):
 
 
 if __name__ == '__main__':
-    main(sys.argv[1:])
+    main()

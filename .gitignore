@@ -9,3 +9,6 @@
 *__pycache__/
 dist/
 torchstain*
+examples/__init__.py
+build/
+fastStainNorm.egg-info/
