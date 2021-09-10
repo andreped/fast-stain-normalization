@@ -6,11 +6,7 @@ README = (HERE / "README.md").read_text()
 
 with open('misc/requirements_torch.txt', 'r', encoding='utf-16') as f:
     required = f.read().splitlines()
-print(required)
-print()
 required += ["torchstain@git+https://github.com/andreped/torchstain@main"]
-print(required)
-# exit()
 
 setup(
     name='fastStainNorm',
@@ -22,12 +18,11 @@ setup(
     author='andreped',
     author_email='andrped94@gmail.com',
     license='MIT',
-    # packages=find_packages(exclude=('tests')),
     zip_safe=False,
     packages=find_packages(),
     entry_points={
         'console_scripts': [
-            'faststainnorm = examples.normalizer_torch:main'
+            'faststainnorm = examples.__main__:main'
         ]
     },
     install_requires=required,
