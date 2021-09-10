@@ -11,26 +11,14 @@ The source code is available for both. See [here](https://github.com/andreped/fa
 ![Screenshot](figures/example_subplot.PNG)
 
 ## Usage
-1. Clone repository:
-```
-git clone https://github.com/andreped/fast-stain-normalization.git
-cd fast-stain-normalization/
-```
 
-2. Create virtual environment and install dependencies:
-```
-virtualenv -ppython3 venv_torch --clear
-source venv_torch/bin/activate
-pip install -r misc/requirements_torch.txt
-pip install torch==1.7.0+cu110 torchvision==0.8.0+cu110 torchaudio==0.7.0 -f https://download.pytorch.org/whl/torch_stable.html
-pip install git+https://github.com/andreped/torchstain.git
-cd examples/
-```
+Install the program using pip (only need to do once!):
 
-3. Run script using the CLI:
-```
-python normalizer_torch.py --ref full-path-to-reference-image --img path-to-images-to-convert --out path-to-store-output
-```
+1. pip install git+https://github.com/andreped/fast-stain-normalization.git
+
+Run the program as a CLI:
+
+2. fastStainNorm --ref full-path-to-reference-image --img path-to-images-to-convert --out path-to-store-output
 
 | command | description |
 | ------------- | ------------- |
