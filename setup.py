@@ -9,7 +9,7 @@ with open('misc/requirements_torch.txt', 'r', encoding='utf-16') as f:
 required += ["torchstain@git+https://github.com/andreped/torchstain@main"]
 
 setup(
-    name='fastStainNorm',
+    name='faststainnorm',
     version='1.0.0',
     description='Package for fast color normalization of H&E-stained images',
     long_description=README,
