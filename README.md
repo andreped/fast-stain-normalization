@@ -41,7 +41,7 @@ Apriori, we know that the Vahadane method is the best performing method among th
 
 | Method  | Reinhard | Macenko | Vahadane | Vahadane (ITK) | Macenko (TS) |
 | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
-| Runtime (s)  | 0.0025 +- 0.0001 | 0.6169 +- 0.0165 | 1.4575 +- 0.0081 | 0.0449 +- 0.02706 | 0.0066 +- 0.0015 |
+| Runtime (s)  | 0.0025 | 0.0001 | 0.6169 | 0.0165 | 1.4575 | 0.0081 | 0.0449 | 0.02706 | 0.0066 | 0.0015 |
 
 Preliminary results showed that the Reinhard color augmentation algorithm was the fastest, but the second fastest method was the Macenko implementation in TS. The third fastest was ITK's implementation of Vahadane. StainTools' implementations of Vahadane and Macenko fell short compared to its counterparts.
 
