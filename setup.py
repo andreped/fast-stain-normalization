@@ -22,7 +22,7 @@ setup(
     packages=find_packages(),
     entry_points={
         'console_scripts': [
-            'faststainnorm = examples.__main__:main'
+            'faststainnorm = source.__main__:main'
         ]
     },
     classifiers=[
