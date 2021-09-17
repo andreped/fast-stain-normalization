@@ -40,7 +40,7 @@ def subplot(imgs):
     plt.show()
 
 
-def single_transform(img_path, device, save_path, torch_normalizer, path):
+def single_transform(img_path, device, save_path, torch_normalizer, path, backend):
     T = transforms.Compose([
         transforms.ToTensor(),
         transforms.Lambda(lambda x: x*255)
@@ -50,16 +50,20 @@ def single_transform(img_path, device, save_path, torch_normalizer, path):
         print("\nImage format not supported:", img_path + path)
         exit()
     to_transform = cv2.cvtColor(cv2.imread(img_path + path), cv2.COLOR_BGR2RGB)
+    t_to_transform = T(to_transform)
 
-    t_to_transform = T(to_transform).to(device)
+    if backend == "torch":
+        t_to_transform = t_to_transform.to(device)
+
     norm, _, _ = torch_normalizer.normalize(I=t_to_transform, stains=True)
-    if device != "cpu":
+
+    if (backend == "torch") and (device != "cpu"):
         norm = norm.cpu().numpy().astype("uint8")
 
     cv2.imwrite(save_path + path, cv2.cvtColor(norm, cv2.COLOR_RGB2BGR))
 
 
-def run(reference_image_filename, img_path, out_path, cpu, parallel, workers):
+def run(reference_image_filename, img_path, out_path, cpu, parallel, workers, backend):
     if torch.cuda.is_available() and (cpu == 0):
         device = torch.device("cuda:0")  # @FIXME: uses first CUDA-compatible GPU, add support for choosing which GPU relevant for multi-GPU setups
     else:
@@ -73,12 +77,12 @@ def run(reference_image_filename, img_path, out_path, cpu, parallel, workers):
         transforms.Lambda(lambda x: x*255)
     ])
 
-    torch_normalizer = torchstain.MacenkoNormalizer(backend='torch')
+    torch_normalizer = torchstain.MacenkoNormalizer(backend=backend)
     torch_normalizer.fit(T(target).to(device))
 
     t_to_transform = T(to_transform).to(device)
     norm, _, _ = torch_normalizer.normalize(I=t_to_transform, stains=True)
-    if device != "cpu":
+    if (backend == "torch") and (device != "cpu"):
         norm = norm.cpu().numpy().astype("uint8")
 
     curr_date, curr_time = get_time()
@@ -87,7 +91,7 @@ def run(reference_image_filename, img_path, out_path, cpu, parallel, workers):
     cv2.imwrite(save_path + img_path.split("/")[-1], cv2.cvtColor(norm, cv2.COLOR_RGB2BGR))
 
 
-def run_batch(reference_image_filename, img_path, out_path, cpu, parallel, workers):
+def run_batch(reference_image_filename, img_path, out_path, cpu, parallel, workers, backend):
     if torch.cuda.is_available() and (cpu == 0):
         device = torch.device("cuda:0")  # @FIXME: uses first CUDA-compatible GPU, add support for choosing which GPU relevant for multi-GPU setups
     else:
@@ -102,7 +106,7 @@ def run_batch(reference_image_filename, img_path, out_path, cpu, parallel, worke
         transforms.Lambda(lambda x: x*255)
     ])
 
-    torch_normalizer = torchstain.MacenkoNormalizer(backend='torch')
+    torch_normalizer = torchstain.MacenkoNormalizer(backend=backend)
     torch_normalizer.fit(T(target).to(device))
 
     curr_date, curr_time = get_time()
@@ -118,13 +122,13 @@ def run_batch(reference_image_filename, img_path, out_path, cpu, parallel, worke
 
         t_to_transform = T(to_transform).to(device)
         norm, _, _ = torch_normalizer.normalize(I=t_to_transform, stains=True)
-        if device != "cpu":
+        if (backend == "torch") and (device != "cpu"):
             norm = norm.cpu().numpy().astype("uint8")
 
         cv2.imwrite(save_path + path, cv2.cvtColor(norm, cv2.COLOR_RGB2BGR))
 
 
-def run_batch_parallel(reference_image_filename, img_path, out_path, cpu, parallel, workers):
+def run_batch_parallel(reference_image_filename, img_path, out_path, cpu, parallel, workers, backend):
     if torch.cuda.is_available() and (cpu == 0):
         device = torch.device("cuda:0")  # @FIXME: uses first CUDA-compatible GPU, add support for choosing which GPU relevant for multi-GPU setups
     else:
@@ -139,7 +143,7 @@ def run_batch_parallel(reference_image_filename, img_path, out_path, cpu, parall
         transforms.Lambda(lambda x: x*255)
     ])
 
-    torch_normalizer = torchstain.MacenkoNormalizer(backend='torch')
+    torch_normalizer = torchstain.MacenkoNormalizer(backend=backend)
     torch_normalizer.fit(T(target).to(device))
 
     curr_date, curr_time = get_time()
@@ -148,7 +152,7 @@ def run_batch_parallel(reference_image_filename, img_path, out_path, cpu, parall
     
     tmp = os.listdir(img_path)
     with mp.Pool(processes=workers) as p:
-        ret = list(tqdm(p.imap_unordered(partial(single_transform, img_path, device, save_path, torch_normalizer), tmp), total=len(tmp)))
+        ret = list(tqdm(p.imap_unordered(partial(single_transform, img_path, device, save_path, torch_normalizer, backend), tmp), total=len(tmp)))
 
 
 def main():
@@ -166,6 +170,8 @@ def main():
                     help="enable multiprocessing.")
     parser.add_argument('--wk', metavar='--c', type=int, nargs='?', default=1,
                     help="set number of workers relevant for multiprocessing.")
+    parser.add_argument('--backend', metavar='--b', type=int, nargs='?', default="torch",
+                    help="set which backend to use for normalization. Torch used as default.")
     ret = parser.parse_args(sys.argv[1:]); print(ret)
 
     if ret.ref is None:
@@ -184,6 +190,8 @@ def main():
         raise ValueError("Number of workers has to be >= 1.")
     if (ret.mp == 1) and (ret.cpu == 0):
         raise NotImplementedError("Does not support multiprocessing on GPU.")
+    if ret.backend not in ["torch", "tensorflow"]:
+        raise ValueError("Please, choose either 'torch' or 'tensorflow' as backend.")
 
     # cap cores
     max_ = mp.cpu_count()

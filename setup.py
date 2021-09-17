@@ -15,7 +15,7 @@ setup(
     long_description=README,
     long_description_content_type='text/markdown',
     url='https://github.com/andreped/fast-stain-normalization',
-    author='andreped',
+    author='André Pedersen',
     author_email='andrped94@gmail.com',
     license='MIT',
     zip_safe=False,
@@ -25,6 +25,11 @@ setup(
             'faststainnorm = examples.__main__:main'
         ]
     },
+    classifiers=[
+         "Programming Language :: Python :: 3",
+         "License :: OSI Approved :: MIT License",
+         "Operating System :: OS Independent",
+     ],
     install_requires=required,
     python_requires='>=3.6',
 )
