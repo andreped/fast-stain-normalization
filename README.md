@@ -27,7 +27,7 @@ fastStainNorm --ref full-path-to-reference-image --img path-to-images-to-convert
 | `--ref` | the full path to the reference image you wish to use, including filename and format. |
 | `--img` | should either be the path to the directly containing the images you wish to normalize, but it could also be the full path to a single image. |
 | `--out` | the path to where you wish to store the result. It will be stored in the same structure as provided in `--img`, and default is `./`. |
-| `--cpu` | to force computations to use the CPU. GPU disabled by default (=1).. |
+| `--cpu` | to force computations to use the CPU. GPU disabled by default (=1). |
 | `--mp` | to enable multiprocessing for performing batch mode with parallel processing. Disabled by default (=0). |
 | `--wk` | set number of workers (relevant for multiprocessing). Default is 1. |
 
