@@ -170,7 +170,7 @@ def main():
                     help="enable multiprocessing.")
     parser.add_argument('--wk', metavar='--c', type=int, nargs='?', default=1,
                     help="set number of workers relevant for multiprocessing.")
-    parser.add_argument('--backend', metavar='--b', type=int, nargs='?', default="torch",
+    parser.add_argument('--backend', metavar='--b', type=str, nargs='?', default="torch",
                     help="set which backend to use for normalization. Torch used as default.")
     ret = parser.parse_args(sys.argv[1:]); print(ret)
 
