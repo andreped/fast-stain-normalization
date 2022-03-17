@@ -19,7 +19,7 @@ pip install git+https://github.com/andreped/fast-stain-normalization.git
 ## Usage
 
 ```
-fastStainNorm --ref full-path-to-reference-image --img path-to-images-to-convert --out path-to-store-output
+faststainnorm --ref full-path-to-reference-image --img path-to-images-to-convert --out path-to-store-output
 ```
 
 | command | description |
