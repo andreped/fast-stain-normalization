@@ -42,7 +42,7 @@ jobs:
         run: |
           mkdir test-samples
           for i in $(seq 1 10); do cp misc/easy.png test-samples/easy-{}.png; done
-          ls -la
+          ls test-samples
 
       - name: Upload Python wheel
         uses: actions/upload-artifact@v2
