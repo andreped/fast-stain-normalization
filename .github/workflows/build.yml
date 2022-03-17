@@ -40,9 +40,17 @@ jobs:
 
       - name: Setup batch mode sample
         run: |
-          mkdir test-samples
-          for i in $(seq 1 10); do cp misc/easy.png test-samples/easy-{}.png; done
-          ls test-samples
+          cp misc/hard.png misc/hard1.png
+          cp misc/hard.png misc/hard2.png
+          cp misc/hard.png misc/hard3.png
+
+      - name: Test batch inference
+        run: faststainnorm --ref misc/easy.png --img misc/ --out ./test
+
+      - name: Check result
+        run: |
+          ls
+          ls test
 
       - name: Upload Python wheel
         uses: actions/upload-artifact@v2
