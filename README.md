@@ -35,7 +35,7 @@ faststainnorm --ref full-path-to-reference-image --img path-to-images-to-convert
 
 For the benchmarking we used the libraries: [ITKColorNormalization](https://github.com/InsightSoftwareConsortium/ITKColorNormalization), [StainTools](https://github.com/Peter554/StainTools) and [torchstain](https://github.com/EIDOSlab/torchstain). ITK and TorchStain (TS) included implementations of the Vahadane and Macenko algorithms, respectively, whereas StainTools included implementations of the Vahadane, Macenko, and Reinhard algorithms. Runtime experiments were conducted over 50 iterations using default parameters, and the mean and standard deviation were reported. The hardware used was an eight-core Intel i7-9800X CPU, with 32 GB RAM, using the Ubuntu Linux 18.04 operating system.
 
-Apriori, we know that the Vahadane method is the best performing method among the three. Macenko performs similar to Vahadane, but is less consistent. Reinhard is the oldest methods of the three and less suited for H%E-stained images.
+Apriori, we know that the Vahadane method is the best performing method among the three. Macenko performs similar to Vahadane, but is less consistent. Reinhard is the oldest methods of the three and less suited for H&E-stained images.
 
 ## Result
 
@@ -47,7 +47,7 @@ Preliminary results showed that the Reinhard color augmentation algorithm was th
 
 ## Discussion
 
-After running ITK's implementation of Vahadane on other images, we found that the method was less robust than TS's implementation of Macenko. ITK seemed to crash often and produce errors on most images that contained either some noise or in scenarios where there were poor contrast between the colours, which might happen when looking at the tissue from a lower resolution level. Hence, the best trade-off among the three might be TS' implementation of Macenko as it is robust, fast, and provides suitable normalization performance [(see here for reference)](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7460968).
+After running ITK's implementation of Vahadane on other images, we found that the method was less robust than TS's implementation of Macenko. ITK seemed to crash often and produce errors on most images that contained either some noise or in scenarios where there were poor contrast between the colours, which might happen when looking at the tissue from a lower resolution level or from patches with mostly glass. Hence, the best trade-off among the three might be TS' implementation of Macenko as it is robust, fast, and provides suitable normalization performance [(see here for reference)](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7460968).
 
 ## Conclusion
 
