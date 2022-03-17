@@ -45,12 +45,7 @@ jobs:
           cp misc/hard.png misc/hard3.png
 
       - name: Test batch inference
-        run: faststainnorm --ref misc/easy.png --img misc/ --out ./test
-
-      - name: Check result
-        run: |
-          ls
-          ls test
+        run: faststainnorm --ref misc/easy.png --img misc/
 
       - name: Upload Python wheel
         uses: actions/upload-artifact@v2
