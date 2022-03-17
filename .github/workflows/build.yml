@@ -36,8 +36,13 @@ jobs:
         run: faststainnorm --help
 
       - name: Test inference
+        run: faststainnorm --ref misc/easy.png --img misc/hard.png
+
+      - name: Setup batch mode sample
         run: |
-          faststainnorm --ref misc/easy.png --img misc/hard.png
+          mkdir test-samples
+          for i in $(seq 1 10); do cp misc/easy.png test-samples/easy-{}.png; done
+          ls -la
 
       - name: Upload Python wheel
         uses: actions/upload-artifact@v2
