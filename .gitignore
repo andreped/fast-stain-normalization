@@ -1,4 +1,4 @@
-*.png
+source/*.png
 *.jpg
 *.jpeg
 *venv/
