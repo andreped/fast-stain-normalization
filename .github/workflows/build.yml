@@ -33,15 +33,15 @@ jobs:
         run: ${{matrix.CMD_BUILD}}
 
       - name: Test CLI
-        run: fast-stain-normalization --help
+        run: fastStainNorm --help
 
       - name: Test inference
         run: |
-          fast-stain-normalization --ref misc/easy.png --img misc/hard.png
+          fastStainNorm --ref misc/easy.png --img misc/hard.png
 
       - name: Upload Python wheel
         uses: actions/upload-artifact@v2
         with:
           name: Python wheel
-          path: ${{github.workspace}}/dist/fast-stain-normalization-*.whl
+          path: ${{github.workspace}}/dist/fastStainNorm-*.whl
           if-no-files-found: error
