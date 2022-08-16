@@ -33,9 +33,9 @@ faststainnorm --ref full-path-to-reference-image --img path-to-images-to-convert
 
 ## Experiment
 
-For the benchmarking we used the libraries: [ITKColorNormalization](https://github.com/InsightSoftwareConsortium/ITKColorNormalization), [StainTools](https://github.com/Peter554/StainTools) and [torchstain](https://github.com/EIDOSlab/torchstain). ITK and TorchStain (TS) included implementations of the Vahadane and Macenko algorithms, respectively, whereas StainTools included implementations of the Vahadane, Macenko, and Reinhard algorithms. Runtime experiments were conducted over 50 iterations using default parameters, and the mean and standard deviation were reported. The hardware used was an eight-core Intel i7-9800X CPU, with 32 GB RAM, using the Ubuntu Linux 18.04 operating system.
+For the benchmarking we used the libraries: [ITKColorNormalization](https://github.com/InsightSoftwareConsortium/ITKColorNormalization), [StainTools](https://github.com/Peter554/StainTools), and [torchstain](https://github.com/EIDOSlab/torchstain). TorchStain (TS) included implementation of the Macenko algorithm, ITK had the same but also Vahadane. Lastly, StainTools included both algorithms but also Reinhard. Runtime experiments were conducted over 50 iterations using default parameters, and the mean and standard deviation were reported. The hardware used was an eight-core Intel i7-9800X CPU, with 32 GB RAM, using the Ubuntu Linux 18.04 operating system.
 
-Apriori, we know that the Vahadane method is the best performing method among the three. Macenko performs similar to Vahadane, but is less consistent. Reinhard is the oldest methods of the three and less suited for H&E-stained images.
+Apriori, we know that the Vahadane method is the best performing method among the three. Macenko is faster than Vahadane, but less robust. Reinhard is the oldest methods of the three and less suited for H&E-stained images.
 
 ## Result
 
