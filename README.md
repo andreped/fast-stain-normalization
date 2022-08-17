@@ -1,7 +1,7 @@
 # fast-stain-normalization
 
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![CI](https://github.com/andreped/fast-stain-normalization/workflows/test/badge.svg)](https://github.com/andreped/fast-stain-normalization/actions)
+[![CI](https://github.com/andreped/fast-stain-normalization/workflows/CI/badge.svg)](https://github.com/andreped/fast-stain-normalization/actions)
 
 This repository contains a tool for stain normalizing images, relevant for computational pathology.
 
