@@ -6,7 +6,6 @@ README = (HERE / "README.md").read_text()
 
 with open('misc/requirements_torch.txt', 'r', encoding='utf-16') as f:
     required = f.read().splitlines()
-required += ["torchstain@git+https://github.com/andreped/torchstain@main"]
 
 setup(
     name='faststainnorm',
