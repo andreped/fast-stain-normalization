@@ -110,4 +110,4 @@ If the patch size chosen is too small, the stain normalization methods might fai
 
 This could not have been possible without the great effort of fellow open-source GitHub users that provide brilliant solutions for me to test and explore!
 
-The code in this repository is based on the three GitHub repositories: [ITKColorNormalization](https://github.com/InsightSoftwareConsortium/ITKColorNormalization), [StainTools](https://github.com/Peter554/StainTools) and [torchstain](https://github.com/EIDOSlab/torchstain). Where the latter, torchstain, was used as foundation to develop the tool.
+The code in this repository is based on the three GitHub repositories: [ITKColorNormalization](https://github.com/InsightSoftwareConsortium/ITKColorNormalization), [StainTools](https://github.com/Peter554/StainTools), and [torchstain](https://github.com/EIDOSlab/torchstain). Where the latter, torchstain, was used as foundation to develop the tool.
