@@ -12,3 +12,5 @@ torchstain*
 examples/__init__.py
 build/
 fastStainNorm.egg-info/
+test/
+.idea/
