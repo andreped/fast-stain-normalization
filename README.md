@@ -17,6 +17,13 @@ The source code is available for both. See [here](https://github.com/andreped/fa
 pip install git+https://github.com/andreped/fast-stain-normalization.git
 ```
 
+Note that to use the GPU, you will need CUDA installed and this requires a different install
+method for the dependencies torch and torchvision. For instance, if you have CUDA 11.2 installed, run:
+
+```
+pip install torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio===0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
+```
+
 ## Usage
 
 ```
