@@ -24,6 +24,8 @@ method for the dependencies torch and torchvision. For instance, if you have CUD
 pip install torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio===0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
 ```
 
+Note that this will overwrite the currently installed `torch` and `torchvision` versions.
+
 ## Usage
 
 ```
