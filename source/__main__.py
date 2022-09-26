@@ -77,7 +77,7 @@ def run(reference_image_filename, img_path, out_path, cpu, parallel, workers, ba
         transforms.Lambda(lambda x: x*255)
     ])
 
-    torch_normalizer = torchstain.MacenkoNormalizer(backend=backend)
+    torch_normalizer = torchstain.normalizers.MacenkoNormalizer(backend=backend)
     torch_normalizer.fit(T(target).to(device))
 
     t_to_transform = T(to_transform).to(device)
@@ -106,7 +106,7 @@ def run_batch(reference_image_filename, img_path, out_path, cpu, parallel, worke
         transforms.Lambda(lambda x: x*255)
     ])
 
-    torch_normalizer = torchstain.MacenkoNormalizer(backend=backend)
+    torch_normalizer = torchstain.normalizers.MacenkoNormalizer(backend=backend)
     torch_normalizer.fit(T(target).to(device))
 
     curr_date, curr_time = get_time()
@@ -143,7 +143,7 @@ def run_batch_parallel(reference_image_filename, img_path, out_path, cpu, parall
         transforms.Lambda(lambda x: x*255)
     ])
 
-    torch_normalizer = torchstain.MacenkoNormalizer(backend=backend)
+    torch_normalizer = torchstain.normalizers.MacenkoNormalizer(backend=backend)
     torch_normalizer.fit(T(target).to(device))
 
     curr_date, curr_time = get_time()
