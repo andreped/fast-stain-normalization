@@ -9,7 +9,7 @@ with open('misc/requirements_torch.txt', 'r', encoding='utf-16') as f:
 
 setup(
     name='faststainnorm',
-    version='1.0.0',
+    version='1.1.0',
     description='Package for fast color normalization of H&E-stained images',
     long_description=README,
     long_description_content_type='text/markdown',
