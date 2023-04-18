@@ -11,7 +11,7 @@ The source code is available for both. See [here](https://github.com/andreped/fa
 
 ![Screenshot](figures/example_subplot.PNG)
 
-## Install
+## [Install](https://github.com/andreped/fast-stain-normalization/tree/main#install)
 
 ```
 pip install git+https://github.com/andreped/fast-stain-normalization.git
@@ -26,7 +26,7 @@ pip install torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio===0.7.2 -f ht
 
 Note that this will overwrite the currently installed `torch` and `torchvision` versions.
 
-## Usage
+## [Usage](https://github.com/andreped/fast-stain-normalization/tree/main#usage)
 
 ```
 faststainnorm --ref full-path-to-reference-image --img path-to-images-to-convert --out path-to-store-output
@@ -41,13 +41,13 @@ faststainnorm --ref full-path-to-reference-image --img path-to-images-to-convert
 | `--mp` | to enable multiprocessing for performing batch mode with parallel processing. Disabled by default (=0). |
 | `--wk` | set number of workers (relevant for multiprocessing). Default is 1. |
 
-## Experiment
+## [Experiment](https://github.com/andreped/fast-stain-normalization/tree/main#experiment)
 
 For the benchmarking we used the libraries: [ITKColorNormalization](https://github.com/InsightSoftwareConsortium/ITKColorNormalization), [StainTools](https://github.com/Peter554/StainTools), and [torchstain](https://github.com/EIDOSlab/torchstain). TorchStain (TS) included implementation of the Macenko algorithm, ITK had the same but also Vahadane. Lastly, StainTools included both algorithms but also Reinhard. Runtime experiments were conducted over 50 iterations using default parameters, and the mean and standard deviation were reported. The hardware used was an eight-core Intel i7-9800X CPU, with 32 GB RAM, using the Ubuntu Linux 18.04 operating system.
 
 Apriori, we know that the Vahadane method is the best performing method among the three. Macenko is faster than Vahadane, but less robust. Reinhard is the oldest methods of the three and less suited for H&E-stained images.
 
-## Result
+## [Result](https://github.com/andreped/fast-stain-normalization/tree/main#result)
 
 | Method  | Reinhard | Macenko | Vahadane | Vahadane (ITK) | Macenko (TS) |
 | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
@@ -55,15 +55,15 @@ Apriori, we know that the Vahadane method is the best performing method among th
 
 Preliminary results showed that the Reinhard color augmentation algorithm was the fastest, but the second fastest method was the Macenko implementation in TS. The third fastest was ITK's implementation of Vahadane. StainTools' implementations of Vahadane and Macenko fell short compared to its counterparts.
 
-## Discussion
+## [Discussion](https://github.com/andreped/fast-stain-normalization/tree/main#discussion)
 
 After running ITK's implementation of Vahadane on other images, we found that the method was less robust than TS's implementation of Macenko. ITK seemed to crash often and produce errors on most images that contained either some noise or in scenarios where there were poor contrast between the colours, which might happen when looking at the tissue from a lower resolution level or from patches with mostly glass. Hence, the best trade-off among the three might be TS' implementation of Macenko as it is robust, fast, and provides suitable normalization performance [(see here for reference)](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7460968).
 
-## Conclusion
+## [Conclusion](https://github.com/andreped/fast-stain-normalization/tree/main#conclusion)
 
 Even though StainTools offers more functionality, both in terms of stain normalization and augmentation, it is not nearly as optimized as the two other alternatives, for respective methods. We found that TS' implementation of Macenko to be best suited for our application, and we have implemented a tool for applying this on your own data.
 
-## Running Experiments
+## [Running Experiments](https://github.com/andreped/fast-stain-normalization/tree/main#running-experiments)
 
 1. Clone repository:
 ```
@@ -86,19 +86,7 @@ python runtime.py
 
 The script support various arguments, i.e. for choosing which method to use or how many iterations to run. Append **-h** to the command to see which arguments are supported and how to use them.
 
-## TODO
-
-- [x] Create a user-friendly CLI tool using `torchstain`
-- [x] Enable GPU computation
-- [x] Enable batch mode
-- [x] Add parallel processing option for batch mode
-- [x] Improve `torchstain` to support batches directly in computations (may improve GPU runtime)
-- [ ] Further optimize the base code to be better suited for parallelization
-- [ ] Add stain augmentation alternative
-
-Using `torchstain`, after doing these experiments we have already introduced GPU computation
-
-## Troubleshooting
+## [Troubleshooting](https://github.com/andreped/fast-stain-normalization/tree/main#troubleshooting)
 
 Virtualenv can be installed using pip:
 ```
@@ -110,13 +98,13 @@ To activate virtual environments on Windows (the description above was for Unix 
 ./venv/Scripts/activate
 ```
 
-#### Benchmark-related only:
+#### [Benchmark-related only](https://github.com/andreped/fast-stain-normalization/tree/main#benchmark-related-only)
 Note that StainTools depends on [SPAMS](https://github.com/samuelstjean/spams-python), which is currently not supported on Windows. Hence, it would not be possible to run the experiments using the Windows operating system. However, Ubuntu Linux and macOS should work.
 
 If the patch size chosen is too small, the stain normalization methods might fail, especially the ITK-implementation. The same implementation might also fail if a colourless patch is provided. The reference image and input images should therefore be of representative size with meaningful content, for the method to produce a meaningful output.
 
 
-## Acknowledgements
+## [Acknowledgements](https://github.com/andreped/fast-stain-normalization/tree/main#acknowledgements)
 
 This could not have been possible without the great effort of fellow open-source GitHub users that provide brilliant solutions for me to test and explore!
 
