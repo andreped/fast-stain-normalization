@@ -63,6 +63,9 @@ After running ITK's implementation of Vahadane on other images, we found that th
 
 Even though StainTools offers more functionality, both in terms of stain normalization and augmentation, it is not nearly as optimized as the two other alternatives, for respective methods. We found that TS' implementation of Macenko to be best suited for our application, and we have implemented a tool for applying this on your own data.
 
+## [Applications](https://github.com/andreped/fast-stain-normalization#applications)
+* Alharbi et al., A Deep Learning–Based Approach to Estimate Paneth Cell Granule Area in Celiac Disease (2023), https://doi.org/10.5858/arpa.2023-0074-OA
+
 ## [Running Experiments](https://github.com/andreped/fast-stain-normalization/tree/main#running-experiments)
 
 1. Clone repository:
